@@ -41,6 +41,7 @@
     "eslint-plugin-react": "^6.9.0",
     "flow-bin": "^0.44.2",
     "jest": "^19.0.2",
+    "lebab": "^2.7.2",
     "licenser": "^0.9.7",
     "nodemon": "~1.11.0",
     "rimraf": "^2.6.1"

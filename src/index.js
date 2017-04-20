@@ -1,3 +1,4 @@
+// @flow
 /**
  * This file is part of node-p2Pool-scanner
 
@@ -15,34 +16,31 @@
 
  * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA 
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-const express = require('express')
-const Scanner = require('./scanner')
+import express from 'express'
+
+import Scanner from './scanner'
 
 const router = express.Router()
-const dash = new Scanner({ config: 'dash' })
-const ltc = new Scanner({ config: 'litecoin' })
-const btc = new Scanner({ config: 'bitcoin' })
+const dash: Object = new Scanner('dash')
+const ltc: Object = new Scanner('litecoin')
+const btc: Object = new Scanner('bitcoin')
 
 router.get('/dash', (req, res) => {
-//  const render = dash.render();
   res.json(dash.render())
   res.end()
 })
 
 router.get('/ltc', (req, res) => {
-  const render = ltc.render()
-  res.json(render)
+  res.json(ltc.render())
   res.end()
 })
 
 router.get('/btc', (req, res) => {
-  const render = btc.render()
-  res.json(render)
+  res.json(btc.render())
   res.end()
 })
 
-// export default router;
-module.exports = router
+export default router

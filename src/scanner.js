@@ -1,3 +1,4 @@
+// @flow
 /**
  * This file is part of node-p2Pool-scanner
 
@@ -15,16 +16,16 @@
 
  * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA 
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-// @flow
-const fs = require('fs')
-const http = require('http')
-const _ = require('lodash')
-const debug = require('debug')
-const Geo = require('./geo')
-const conf = require('../data/config.json')
+import fs from 'fs'
+
+import http from 'http'
+import _ from 'lodash'
+import debug from 'debug'
+import Geo from './geo'
+import conf from '../data/config.json'
 
 const dpc = (t, fn) => {
   if (_.isFunction(t)) {
@@ -41,15 +42,11 @@ const iterObj = (obj, cb) => {
   while (l--) cb(keys[l])
 }
 
-/**
- * Creates instance of p2pool scanner.
- * @param {String} opts
-*/
-function Scanner(opts /* : Object */) {
+function Scanner(config: string) {
   const self = this
   //  functions to fetch data from target node IP
 
-  self.config = conf[opts.config]
+  self.config = conf[config]
 
   self.addr_pending = {}
   //  list of addresses waiting scan
@@ -60,47 +57,47 @@ function Scanner(opts /* : Object */) {
   self.share_addrs = {}
   //  map of share to ip:port
 
-  self.geo = new Geo({ timeout: self.config.http_socket_timeout })
+  self.geo = new Geo(self.config.http_socket_timeout)
 
   const log = debug(`node-p2pool-scanner:${self.config.currency}:info`)
   const error = debug(`node-p2pool-scanner:${self.config.currency}:error`)
-  // log.log = console.info.bind(console)
-  // error.log = console.error.bind(console)
+  log.log = console.info.bind(console)
+  error.log = console.error.bind(console)
 
-  const digestLocalStats = (info, callback) => {
+  const digestLocalStats = ({ ip, port }, callback) => {
     const options = {
-      host: info.ip,
-      port: info.port,
+      host: ip,
+      port,
       path: '/local_stats',
       method: 'GET',
     }
     return self.request(options, callback)
   }
 
-  const digestShares = (info, callback) => {
+  const digestShares = ({ ip, port }, callback) => {
     const options = {
-      host: info.ip,
-      port: info.port,
+      host: ip,
+      port,
       path: '/web/my_share_hashes',
       method: 'GET',
     }
     return self.request(options, callback)
   }
 
-  const digestGlobalStats = (info, callback) => {
+  const digestGlobalStats = ({ ip, port }, callback) => {
     const options = {
-      host: info.ip,
-      port: info.port,
+      host: ip,
+      port,
       path: '/global_stats',
       method: 'GET',
     }
     return self.request(options, callback)
   }
 
-  const digestGetworkLatency = (info, callback) => {
+  const digestGetworkLatency = ({ ip, port }, callback) => {
     const options = {
-      host: info.ip,
-      port: info.port,
+      host: ip,
+      port,
       path: '/web/graph_data/getwork_latency/last_hour',
       method: 'GET',
     }
@@ -128,7 +125,7 @@ function Scanner(opts /* : Object */) {
     const res = {
       currency: self.config.currency,
       pool_speed: self.poolstats ? parseInt(self.poolstats.pool_hash_rate, 10) : 'N/A',
-      est_good_shares: (self.pool_good_rate * 100).toFixed(2),
+      est_good_shares: (self.poolGoodRate * 100).toFixed(2),
       nodes_total: self.nodes_total || 'N/A',
       public_nodes: _.size(self.addr_working),
       totalHashRate: parseInt(totalHashRate, 10),
@@ -137,8 +134,8 @@ function Scanner(opts /* : Object */) {
       good_shares: publicGoodRate ? (publicGoodRate * 100).toFixed(2) : '',
       info: [],
     }
-    const list = _.sortBy(_.toArray(self.addr_working), (o) => {
-      if (o.ip === '5.9.143.40') { return -1 } else if (o.good_rate && o.stats.shares.total) { return o.good_rate * o.good_rate * Math.log(o.stats.shares.total) }
+    const list = _.sortBy(_.toArray(self.addr_working), ({ ip, goodRate, stats }) => {
+      if (ip === '5.9.143.40') { return -1 } else if (goodRate && stats.shares.total) { return goodRate * goodRate * Math.log(stats.shares.total) }
       return 0
     })
 
@@ -149,7 +146,7 @@ function Scanner(opts /* : Object */) {
         port: self.config.port,
         fee: (info.fee || 0).toFixed(2),
         uptime: info.stats ? (info.stats.uptime / 60 / 60 / 24).toFixed(1) : 'N/A',
-        effi: info.good_rate && publicGoodRate ? ((info.good_rate / publicGoodRate) * 100).toFixed(2) : 'N/A',
+        effi: info.goodRate && publicGoodRate ? ((info.goodRate / publicGoodRate) * 100).toFixed(2) : 'N/A',
         version: info.stats.version ? _.replace(info.stats.version, /-g.*/, '') : 'N/A',
         hashrate: parseInt(info.totalHashRate, 10),
         users: info.totalUsers,
@@ -219,14 +216,14 @@ function Scanner(opts /* : Object */) {
     })
     const shares = info.stats.shares
     if (shares.total) {
-      info.good_rate = (shares.total - shares.orphan - shares.dead) / shares.total
+      info.goodRate = (shares.total - shares.orphan - shares.dead) / shares.total
     }
-    if (info.good_rate && info.stats.efficiency) {
-      const currentGoodRate = info.good_rate / info.stats.efficiency
-      if (self.pool_good_rate) {
-        self.pool_good_rate = (self.pool_good_rate + currentGoodRate) / 2
+    if (info.goodRate && info.stats.efficiency) {
+      const currentGoodRate = info.goodRate / info.stats.efficiency
+      if (self.poolGoodRate) {
+        self.poolGoodRate = (self.poolGoodRate + currentGoodRate) / 2
       } else {
-        self.pool_good_rate = currentGoodRate
+        self.poolGoodRate = currentGoodRate
       }
     }
 
@@ -241,8 +238,8 @@ function Scanner(opts /* : Object */) {
     }
   }
 
-  self.remove_node = (info) => {
-    const id = `${info.ip}:${info.port}`
+  self.remove_node = ({ ip, port }) => {
+    const id = `${ip}:${port}`
     iterObj(self.share_addrs, (share) => {
       if (id in self.share_addrs[share]) { return (delete self.share_addrs[share][id]) }
       return true
@@ -353,13 +350,13 @@ function Scanner(opts /* : Object */) {
           if (!errDigestGlobal) { self.update_global_stats(statsDigest) }
 
           if (!info.geo) {
-            self.geo.get(info.ip, (errGeo, geo) => {
+            self.geo.get(info.ip, (errGeo, { code, country, region, city }) => {
               if (!errGeo) {
                 info.geo = {}
-                info.geo.code = geo.code
-                info.geo.country = geo.country
-                if (geo.region) { info.geo.country += `, ${geo.region}` }
-                if (geo.city) { info.geo.country += `, ${geo.city}` }
+                info.geo.code = code
+                info.geo.country = country
+                if (region) { info.geo.country += `, ${region}` }
+                if (city) { info.geo.country += `, ${city}` }
               }
             })
           }
@@ -426,5 +423,5 @@ function Scanner(opts /* : Object */) {
   log(`Started scanner for ${self.config.currency}`)
 }
 
-module.exports = Scanner
+export default Scanner
 

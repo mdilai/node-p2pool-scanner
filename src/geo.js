@@ -1,3 +1,4 @@
+// @flow
 /**
  * This file is part of node-p2Pool-scanner
 
@@ -15,13 +16,12 @@
 
  * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA 
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-// @flow
-const http = require('http')
+import http from 'http'
 
-function Geo(opts/* : Object */) {
+function Geo(timeout: number) {
   const self = this
 
   function request(options, callback) {
@@ -40,18 +40,18 @@ function Geo(opts/* : Object */) {
     })
     req.on('error', e => console.error('Got an error: ', e))
     req.on('socket', (socket) => {
-      socket.setTimeout(opts.timeout)
+      socket.setTimeout(timeout)
       socket.on('timeout', () => req.abort())
       socket.removeListener('error', () => req.abort())
     })
   }
 
-  function extractGeo(response) {
+  function extractGeo({ country_name, region_name, city, country_code }) {
     const o = {
-      country: response.country_name,
-      region: response.region_name,
-      city: response.city,
-      code: response.country_code,
+      country: country_name,
+      region: region_name,
+      city,
+      code: country_code,
     }
 
     return o
@@ -80,4 +80,4 @@ function Geo(opts/* : Object */) {
   }
 }
 
-module.exports = Geo
+export default Geo
