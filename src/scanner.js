@@ -170,7 +170,7 @@ function Scanner(config: string) {
   self.update = () => {
     const filename = self.config.addr_file
     //  if we can't read p2pool's addr file, we just cycle on the local default init...
-    fs.readFile(filename, { encoding: 'utf8' }, (err/* :?ErrnoError*/, data/* : string */) => {
+    fs.readFile(filename, { encoding: 'utf8' }, (err: ?ErrnoError, data: string) => {
       if (err) {
         error(`[${self.config.currency}]: Error reading ${filename}`)
         return
@@ -249,7 +249,7 @@ function Scanner(config: string) {
   //  reload public list at startup
 
   self.restore_working = () => {
-    fs.readFile(self.config.store_file, { encoding: 'utf8' }, (err/* : ?ErrnoError */, data/* : string */) => {
+    fs.readFile(self.config.store_file, { encoding: 'utf8' }, (err: ?ErrnoError, data: string) => {
       if (err) {
         error(`[${self.config.currency}]: Error reading ${self.config.store_file}`)
         return
