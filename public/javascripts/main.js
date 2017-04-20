@@ -163,6 +163,8 @@ const getlist = function (options) {
 
 $(document).ready(() => {
   const table = $('#sortTable').stupidtable()
+  const thToSort = table.find("thead th").eq(8);
+  thToSort.stupidsort();
   let anchor
   table.on('aftertablesort', function (event, data) {
     const { dir } = $.fn.stupidtable
