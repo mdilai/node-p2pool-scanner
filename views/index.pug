@@ -1,0 +1,67 @@
+extends layout
+mixin p2pool(info)
+  tr.p2pool
+    td.id
+      - var id = info.ip+":9327";
+      a(href="http://"+id)= id
+    td.geo
+      if info.geo
+        =info.geo.country+' '
+        img(src=info.geo.img)
+    td.fee= info.fee
+    td.uptime= info.uptime
+    td.effi= info.effi
+    td.hashrate= info.hashrate+"h/s"
+    td.users= info.total_users
+    td.ping
+      button(onclick='ping_server(\''+id+'\')') Click me
+    td.gwtl
+    td.version= info.version
+
+block content
+  div(class="navbar navbar-default navbar-fixed-top", role="navigation")
+    div(class="container-fluid")
+      div(class="navbar-header")
+        button(type="button", class="navbar-toggle", data-toggle="collapse", data-target=".navbar-collapse")
+          span(class="sr-only") Toggle navigation
+          span(class="icon-bar")
+          span(class="icon-bar")
+          span(class="icon-bar")
+        a(href="http://poolnode.info/", class="navbar-brand")
+          img(src="./img/BC_Logotype_Reverse.png", height="23", width="90", alt="bitcoin")
+          p p2pool nodes
+      div(class="collapse navbar-collapse", id="navbar-main")
+        ul(class="nav navbar-nav navbar-right")
+          li
+            a(href="#") Example
+  div(class="container")
+    div(class="row")
+      div(class="col-lg-6 well well-sm")
+        h2 P2Pool node list
+        p The list is populated by your browser so it reflects your connectivity to the nodes.
+        p Sortable by column. Manual check for 
+          abbr(title="Get Block Template Lattency") GBTL 
+          is available.
+  div(class="container")
+    div(class="row")
+      table(class="table table-bordered table-striped table-hover", id="sortTable")
+        thead
+          tr
+            th(title="Sort by Address" data-sort="string-ins") Address
+            th(title="Sort by Location", data-sort="string-ins" class="sorting-asc") Location
+            th(title="Sort by Fee", class="text-right", data-sort="float") Fee
+            th(title="Sort by Uptime", class="text-right", data-sort="int", class="sorting-desc") Uptime
+            th(title="Sort by Efficiency", class="text-center", data-sort="int") Efficiency
+            th(title="Sort by Hash rate", class="text-right", data-sort="int") Hash rate
+            th(title="Sort by Users", class="text-right", data-sort="int") Users
+            th(title="Sort by Ping", class="text-right", data-sort="int") Ping
+            th(title="Get Block Template Latency", class="text-center") GBTL
+            th(title="Sort by Version", data-sort="string-ins") Version
+          tbody(id="list")
+            for info in obj.info
+              +p2pool(info)
+  script(src='https://code.jquery.com/jquery-latest.min.js')
+  script(src='https://cdn.rawgit.com/joequery/Stupid-Table-Plugin/master/stupidtable.min.js')
+  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+  script(src='https://cdn.rawgit.com/jdfreder/pingjs/master/ping.js')
+  script(src="/javascripts/main.js")

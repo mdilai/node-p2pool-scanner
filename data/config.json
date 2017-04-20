@@ -1,0 +1,34 @@
+{
+  "dash": {
+	  "port": 7903,						
+  	"currency": "DASH",
+  	"addr_file": "/opt/p2pool-dash/app/data/dash/addrs",
+  	"init_file": "data/p2pool-dash-init.txt",
+  	"store_file": "data/p2pool-dash-public.json",
+  	"probe_N_IPs_simultaneously": 2560,
+  	"http_socket_timeout": 10000,
+  	"rescan_list_delay": 0
+  },
+
+  "litecoin": {
+	  "port": 9327,	
+  	"currency": "Litecoin",
+  	"addr_file": "/opt/p2pool/app/data/litecoin/addrs",
+  	"init_file": "data/p2pool-litecoin-init.txt",
+  	"store_file": "data/p2pool-litecoin-public.json",
+  	"probe_N_IPs_simultaneously": 3072,
+  	"http_socket_timeout": 10000, 
+  	"rescan_list_delay": 0
+  },
+
+  "bitcoin": {
+	  "port": 9332,
+  	"currency": "Bitcoin",
+  	"addr_file": "/opt/p2pool/app/data/bitcoin/addrs",
+  	"init_file": "data/p2pool-bitcoin-init.txt",
+    "store_file": "data/p2pool-bitcoin-public.json",
+  	"probe_N_IPs_simultaneously": 3300,	
+  	"http_socket_timeout": 10000,
+  	"rescan_list_delay": 0
+  }
+}

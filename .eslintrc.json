@@ -1,0 +1,22 @@
+{
+    "env": {
+      "jest": true
+  },
+    "extends": [
+      "airbnb",
+      "plugin:lodash/recommended",
+      "plugin:flowtype/recommended"
+    ],
+    "plugins": [
+      "lodash",
+      "flowtype"
+    ],
+    "rules": {
+      "semi": [2, "never"],
+      "no-unexpected-multiline": 2,
+      "no-bitwise": [2, { "allow": ["|"] }],
+      "no-plusplus": 0,
+      "no-console": 0,
+      "lodash/import-scope": 0
+    }
+}
