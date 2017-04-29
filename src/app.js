@@ -22,26 +22,26 @@
 import express from 'express'
 
 import path from 'path'
-import logger from 'morgan'
-import sassMiddleware from 'node-sass-middleware'
-import minify from 'express-minify'
-import compression from 'compression'
-import favicon from 'serve-favicon'
+//import logger from 'morgan'
+//import sassMiddleware from 'node-sass-middleware'
+//import minify from 'express-minify'
+//import compression from 'compression'
+//import favicon from 'serve-favicon'
 import index from './index'
 
 const app = express()
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, '../public', 'favicon.png')))
-app.use(logger('dev'))
-app.use(sassMiddleware({
+//app.use(favicon(path.join(__dirname, '../public', 'favicon.png')))
+//app.use(logger('dev'))
+/*app.use(sassMiddleware({
   src: path.join(__dirname, '../public'),
   dest: path.join(__dirname, '../public'),
   indentedSyntax: true,
   sourceMap: true,
   outputStyle: 'compressed' }),
-)
-app.use(compression())
-app.use(minify())
+) */
+/*app.use(compression())
+app.use(minify()) */
 app.use(express.static(path.join(__dirname, '../public')))
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:4200')
