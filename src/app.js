@@ -34,6 +34,9 @@ const node = {}
 if (cluster.isMaster) {
   debug(`Master ${process.pid} is running`);
 
+  for (const coin of instances)
+        node[coin] = cluster.fork({worker: coin})
+
   const normalizePort = val => {
     const port = parseInt(val, 10);
     if (isNaN(port)) {
@@ -80,23 +83,28 @@ if (cluster.isMaster) {
   server.on('listening', onListening);
 
   app.use(express.static(path.join(__dirname, '../public')))
-  app.use((req, res, next) => {
+/*  app.use((req, res, next) => {
+    res.setHeader('Content-Type', 'application/json');
     res.header('Access-Control-Allow-Origin', 'http://localhost:4200')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     return next()
-  })
+  }) */
 
-  for (const coin of instances) {
-    let forkWorker = cluster.fork({worker: coin})
-    app.get(`/${coin}`, (req, res) => {
-      forkWorker.send('render')
-      forkWorker.on('message', msg => {
-        if(msg){
-          res.end(JSON.stringify(msg))
+  app.use('/:coin', (req, res, next) => {
+    res.setHeader('Content-Type', 'application/json');
+    if (node[req.params.coin]) {
+      node[req.params.coin].send('render')
+      node[req.params.coin].on('message', msg => {
+        if (msg) {
+          return res.end(JSON.stringify(msg))
+        } else {
+          return next()
         }
       })
-   })
-  }
+    } else {
+    return next()
+    }
+  })
 
   // catch 404 and forward to error handler
   app.use((req, res, next) => {
@@ -122,9 +130,9 @@ if (cluster.isMaster) {
 
   } else {
     let scanner = new Scanner(process.env.worker)
-      process.on('message', (msg) => {
+      process.on('message', msg => {
         if (msg === 'render')
-          process.send(scanner.render())
+          return process.send(scanner.render())
       })
   }
 
