@@ -10,7 +10,7 @@
   	"rescan_list_delay": 5000
   },
 
-  "litecoin": {
+  "ltc": {
 	  "port": 9327,	
   	"currency": "Litecoin",
   	"addr_file": "/opt/p2pool/app/data/litecoin/addrs",
@@ -21,7 +21,7 @@
   	"rescan_list_delay": 5000
   },
 
-  "bitcoin": {
+  "btc": {
 	  "port": 9332,
   	"currency": "Bitcoin",
   	"addr_file": "/opt/p2pool/app/data/bitcoin/addrs",

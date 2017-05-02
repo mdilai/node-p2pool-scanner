@@ -1,1 +1,1 @@
-bin/www
+lib/app.js

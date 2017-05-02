@@ -420,7 +420,7 @@ function Scanner(config: string) {
     req.end()
   }
 
-  log(`Started scanner for ${self.config.currency}`)
+  log(`[PID ${process.pid}] Started scanner for ${self.config.currency}`)
 }
 
 export default Scanner
