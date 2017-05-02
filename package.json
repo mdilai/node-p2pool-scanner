@@ -10,13 +10,14 @@
   },
   "scripts": {
     "start": "DEBUG='node-p2pool-scanner:* node-p2pool-scanner:*:*' NODE_ENV=development nodemon --exec 'node --use_strict' -w src -w app.js ./app.js",
-    "build": "rimraf lib && babel src -d lib --ignore .test.js --presets env",
+    "build": "rimraf lib && babel src -d lib --ignore .test.js",
     "devstart": "nodaemon src/ node --prof ./bin/www",
     "test": "eslint --fix src && flow && jest --coverage",
     "port": "flow port",
     "css": "node-sass --recursive --output public/stylesheets/ --source-map true --output-style compressed public/stylesheets/"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "lodash": "~4.17.4"
@@ -25,6 +26,9 @@
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.2",
     "babel-jest": "^19.0.0",
+    "babel-plugin-transform-async-to-module-method": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.4.0",
     "babel-preset-flow": "^6.23.0",
     "eslint": "^3.15.0",

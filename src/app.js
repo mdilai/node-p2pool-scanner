@@ -25,6 +25,7 @@ import path from 'path'
 import cluster from 'cluster'
 import conf from '../data/config.json'
 import Scanner from './scanner'
+const Promise = require('bluebird')
 const debug = require('debug')('node-p2pool-scanner:server');
 const app = express()
 
@@ -76,6 +77,9 @@ if (cluster.isMaster) {
     debug(`Listening on ${bind}`);
   };
 
+  const wrap = fn => (...args) => fn(...args).catch(args[2])
+  const stringifyPromise = jsonText => Promise.try(() => JSON.stringify(jsonText))
+
   let port = normalizePort(process.env.PORT || '3000');
   app.set('port', port);
   const server = app.listen(port, () => debug('Express server listening on port ' + server.address().port))
@@ -90,13 +94,18 @@ if (cluster.isMaster) {
     return next()
   }) */
 
-  app.use('/:coin', (req, res, next) => {
-    res.setHeader('Content-Type', 'application/json');
+  app.use('/:coin', wrap(async (req, res, next) => {
+    res.setHeader('Content-Type', 'application/json'); 
     if (node[req.params.coin]) {
       node[req.params.coin].send('render')
-      node[req.params.coin].on('message', msg => {
+      node[req.params.coin].on('message', async msg => {
         if (msg) {
-          return res.end(JSON.stringify(msg))
+          try {
+            const resp = await stringifyPromise(msg)
+            return res.end(resp)
+          } catch (err) {
+            return next(err)
+          }
         } else {
           return next()
         }
@@ -104,7 +113,7 @@ if (cluster.isMaster) {
     } else {
     return next()
     }
-  })
+  }))
 
   // catch 404 and forward to error handler
   app.use((req, res, next) => {
