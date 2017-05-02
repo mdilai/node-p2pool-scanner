@@ -20,71 +20,83 @@
  */
 
 import express from 'express'
-
 import path from 'path'
 import cluster from 'cluster'
+import Promise from 'bluebird'
+import _ from 'lodash'
 import conf from '../data/config.json'
 import Scanner from './scanner'
-const Promise = require('bluebird')
-const debug = require('debug')('node-p2pool-scanner:server');
+
+const debug = require('debug')('node-p2pool-scanner:server')
+
 const app = express()
 
-const instances = Object.keys(conf)
+const instances = _.keys(conf)
 const node = {}
 
+const iterObj = (obj, cb) => {
+  const keys = _.keys(obj)
+  let l = _.size(keys)
+  while (l--) cb(keys[l])
+}
+
 if (cluster.isMaster) {
-  debug(`Master ${process.pid} is running`);
+  debug(`Master ${process.pid} is running`)
 
-  for (const coin of instances)
-        node[coin] = cluster.fork({worker: coin})
+  iterObj(instances, (coin) => {
+    node[coin] = cluster.fork({ worker: coin })
+    return node[coin]
+  })
 
-  const normalizePort = val => {
-    const port = parseInt(val, 10);
+  const normalizePort = (val) => {
+    const port = parseInt(val, 10)
     if (isNaN(port)) {
       // named pipe
-      return val;
-     }
-     if (port >= 0) {
+      return val
+    }
+    if (port >= 0) {
        // port number
-       return port;
-     }
-     return false;
+      return port
+    }
+    return false
   }
 
-  const onError = error => {
+  const port = normalizePort(process.env.PORT || '3000')
+
+  const onError = (error) => {
     if (error.syscall !== 'listen') {
-      throw error;
+      throw error
     }
-    const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
+    const bind = _.isString(port) ? `Pipe ${port}` : `Port ${port}`
     // handle specific listen errors with friendly messages
     switch (error.code) {
       case 'EACCES':
-        console.error(`${bind} requires elevated privileges`);
-        process.exit(1);
-        break;
+        console.error(`${bind} requires elevated privileges`)
+        process.exit(1)
+        break
       case 'EADDRINUSE':
-        console.error(`${bind} is already in use`);
-        process.exit(1);
-        break;
+        console.error(`${bind} is already in use`)
+        process.exit(1)
+        break
       default:
-        throw error;
+        throw error
     }
-  };
+  }
+
+  const server = app.listen(port, () => debug(`Express server listening on port ${server.address().port}`))
 
   const onListening = () => {
-    const addr = server.address();
-    const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-    debug(`Listening on ${bind}`);
-  };
+    const addr = server.address()
+    const bind = _.isString(addr) ? `pipe ${addr}` : `port ${addr.port}`
+    debug(`Listening on ${bind}`)
+  }
 
   const wrap = fn => (...args) => fn(...args).catch(args[2])
   const stringifyPromise = jsonText => Promise.try(() => JSON.stringify(jsonText))
 
-  let port = normalizePort(process.env.PORT || '3000');
-  app.set('port', port);
-  const server = app.listen(port, () => debug('Express server listening on port ' + server.address().port))
-  server.on('error', onError);
-  server.on('listening', onListening);
+  app.set('port', port)
+  server.on('error', onError)
+  server.on('listening', onListening)
 
   app.use(express.static(path.join(__dirname, '../public')))
 /*  app.use((req, res, next) => {
@@ -95,10 +107,10 @@ if (cluster.isMaster) {
   }) */
 
   app.use('/:coin', wrap(async (req, res, next) => {
-    res.setHeader('Content-Type', 'application/json'); 
+    res.setHeader('Content-Type', 'application/json')
     if (node[req.params.coin]) {
       node[req.params.coin].send('render')
-      node[req.params.coin].on('message', async msg => {
+      node[req.params.coin].on('message', async (msg) => {
         if (msg) {
           try {
             const resp = await stringifyPromise(msg)
@@ -111,8 +123,9 @@ if (cluster.isMaster) {
         }
       })
     } else {
-    return next()
+      return next()
     }
+    return next()
   }))
 
   // catch 404 and forward to error handler
@@ -134,14 +147,19 @@ if (cluster.isMaster) {
   })
 
   cluster.on('exit', (worker, code, signal) => {
-    debug(`worker ${worker.process.pid} died`);
+    if (signal) {
+      debug(`worker ${worker.process.pid} was killed by signal: ${signal}`)
+    } else if (code !== null) {
+      debug(`worker ${worker.process.pid} exited with error code: ${code}`)
+    } else {
+      debug(`worker ${worker.process.pid} died`)
+    }
   })
-
-  } else {
-    let scanner = new Scanner(process.env.worker)
-      process.on('message', msg => {
-        if (msg === 'render')
-          return process.send(scanner.render())
-      })
-  }
+} else {
+  const scanner = new Scanner(process.env.worker)
+  process.on('message', (msg) => {
+    if (msg === 'render') { return process.send(scanner.render()) }
+    return true
+  })
+}
 
