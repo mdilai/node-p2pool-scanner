@@ -127,6 +127,9 @@ const getlist = function (options) {
           if (info.ip === '5.9.143.40') {
             info.ip = `${options}.coinpool.pw`
           }
+          if (info.ip === '212.45.19.162') {
+            info.ip = 'low-doa.mine.nu'
+          }
           id = `${info.ip}:${info.port}`
           let trHTML = ''
           trHTML += `<tr class="id"><td><a href="http://${id}">${id}</a></td>`
@@ -178,6 +181,6 @@ $(document).ready(() => {
     anchor = anchor.substr(1, anchor.length)
     getlist(anchor)
   })
-  getlist('dash')
+  getlist('btc')
 })
 

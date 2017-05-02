@@ -13,7 +13,8 @@
     "build": "rimraf lib && babel src -d lib --ignore .test.js --presets env",
     "devstart": "nodaemon src/ node --prof ./bin/www",
     "test": "eslint --fix src && flow && jest --coverage",
-    "port": "flow port"
+    "port": "flow port",
+    "css": "node-sass --recursive --output public/stylesheets/ --source-map true --output-style compressed public/stylesheets/"
   },
   "dependencies": {
     "debug": "~2.6.3",
@@ -38,6 +39,7 @@
     "jest": "^19.0.2",
     "lebab": "^2.7.2",
     "licenser": "^0.9.7",
+    "node-sass": "^4.5.2",
     "nodemon": "~1.11.0",
     "rimraf": "^2.6.1"
   },

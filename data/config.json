@@ -5,9 +5,9 @@
   	"addr_file": "/opt/p2pool-dash/app/data/dash/addrs",
   	"init_file": "data/p2pool-dash-init.txt",
   	"store_file": "data/p2pool-dash-public.json",
-  	"probe_N_IPs_simultaneously": 2560,
+  	"probe_N_IPs_simultaneously": 48,
   	"http_socket_timeout": 10000,
-  	"rescan_list_delay": 0
+  	"rescan_list_delay": 5000
   },
 
   "litecoin": {
@@ -16,9 +16,9 @@
   	"addr_file": "/opt/p2pool/app/data/litecoin/addrs",
   	"init_file": "data/p2pool-litecoin-init.txt",
   	"store_file": "data/p2pool-litecoin-public.json",
-  	"probe_N_IPs_simultaneously": 3072,
+  	"probe_N_IPs_simultaneously": 48,
   	"http_socket_timeout": 10000, 
-  	"rescan_list_delay": 0
+  	"rescan_list_delay": 5000
   },
 
   "bitcoin": {
@@ -27,8 +27,8 @@
   	"addr_file": "/opt/p2pool/app/data/bitcoin/addrs",
   	"init_file": "data/p2pool-bitcoin-init.txt",
     "store_file": "data/p2pool-bitcoin-public.json",
-  	"probe_N_IPs_simultaneously": 3300,	
+  	"probe_N_IPs_simultaneously": 48,	
   	"http_socket_timeout": 10000,
-  	"rescan_list_delay": 0
+  	"rescan_list_delay": 5000
   }
 }
