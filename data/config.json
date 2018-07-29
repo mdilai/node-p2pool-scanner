@@ -30,6 +30,6 @@
   	"probe_N_IPs_simultaneously": 48,	
   	"http_socket_timeout": 10000,
   	"rescan_list_delay": 5000
-  },
+  }
 
 }
