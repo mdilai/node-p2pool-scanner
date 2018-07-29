@@ -94,21 +94,12 @@ var getlist = function getlist(options) {
       }
       $('#miner').html(pHTML);
       $('#donations').html(donat);
-      if (options === 'btc-fork') {
-        pHTML = '<div class="alert alert-info">';
-        pHTML += 'This is a nodes running <a href="https://github.com/jtoomim/p2pool/tree/1mb_hardforked">forked version of P2Pool software by Jtoomim</a> (details at <a href="https://bitcointalk.org/index.php?topic=18313">https://bitcointalk.org/index.php?topic=18313</a>)';
-        pHTML += '</div>';
-        $('#info').html(pHTML);
-      }
       $.each(data.info, function (i, info) {
         var img = info.geo.code ? 'https://geoiptool.com/static/img/flags/' + info.geo.code.toLowerCase() + '.gif' : '';
         var id = info.ip + ':' + info.port;
         ping('http://' + id + '/fee', 0.5).then(function (delta) {
           if (info.ip === '5.9.143.40') {
             info.ip = options + '.coinpool.pw';
-          }
-          if (info.ip === '212.45.19.162') {
-            info.ip = 'low-doa.mine.nu';
           }
           id = info.ip + ':' + info.port;
           var trHTML = '';
@@ -162,5 +153,5 @@ $(document).ready(function () {
     anchor = anchor.substr(1, anchor.length);
     getlist(anchor);
   });
-  getlist('btc-fork');
+  getlist('btc');
 });
