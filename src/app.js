@@ -34,19 +34,13 @@ const app = express()
 const instances = _.keys(conf)
 const node = {}
 
-const iterObj = (obj, cb) => {
-  const keys = _.keys(obj)
-  let l = _.size(keys)
-  while (l--) cb(keys[l])
-}
+process.setMaxListeners(0);
 
 if (cluster.isMaster) {
   debug(`Master ${process.pid} is running`)
 
-  iterObj(instances, (coin) => {
+  for (const coin of instances)
     node[coin] = cluster.fork({ worker: coin })
-    return node[coin]
-  })
 
   const normalizePort = (val) => {
     const port = parseInt(val, 10)
@@ -125,7 +119,6 @@ if (cluster.isMaster) {
     } else {
       return next()
     }
-    return next()
   }))
 
   // catch 404 and forward to error handler

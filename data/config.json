@@ -16,7 +16,7 @@
   	"addr_file": "/opt/p2pool/app/data/litecoin/addrs",
   	"init_file": "data/p2pool-litecoin-init.txt",
   	"store_file": "data/p2pool-litecoin-public.json",
-  	"probe_N_IPs_simultaneously": 48,
+  	"probe_N_IPs_simultaneously": 30,
   	"http_socket_timeout": 10000, 
   	"rescan_list_delay": 5000
   },
@@ -24,11 +24,21 @@
   "btc": {
 	  "port": 9332,
   	"currency": "Bitcoin",
-  	"addr_file": "/opt/p2pool/app/data/bitcoin/addrs",
+  	"addr_file": "/opt/p2pool/fork/app/data/bitcoin/addrs",
   	"init_file": "data/p2pool-bitcoin-init.txt",
     "store_file": "data/p2pool-bitcoin-public.json",
   	"probe_N_IPs_simultaneously": 48,	
   	"http_socket_timeout": 10000,
   	"rescan_list_delay": 5000
+  },
+
+  "btc-fork": {
+    "port": 9334,
+    "currency": "Bitcoin-Fork",
+    "addr_file": "/opt/p2pool/fork/app/data/bitcoin/addrs",
+    "store_file": "data/p2pool-bitcoin-fork-public.json",
+    "probe_N_IPs_simultaneously": 48,
+    "http_socket_timeout": 10000,
+    "rescan_list_delay": 5000
   }
 }

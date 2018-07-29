@@ -21,6 +21,8 @@
 
 import http from 'http'
 
+const access_key = '8ac4083db135ae1c5137c8f458837415'
+
 function Geo(timeout: number) {
   const self = this
 
@@ -60,9 +62,9 @@ function Geo(timeout: number) {
   self.get = (ip, callback) => {
     //        console.log("QUERYING IP:",ip);
     const options = {
-      host: 'freegeoip.net',
+      host: 'api.ipstack.com',
       port: 80,
-      path: `/json/${ip}`,
+      path: `/${ip}?access_key=${access_key}&fields=country_name,region_name,city,country_code`,
       method: 'GET',
     }
 
