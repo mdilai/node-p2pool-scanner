@@ -26,7 +26,7 @@
     "node-sass": "^4.9.3"
   },
   "description": "Scanner of public P2Pool nodes",
-  "main": "bin/www",
+  "main": "src/app.mjs",
   "author": "Maksym Dilai <admin@dproject.org.ua>",
   "license": "GPL-3.0"
 }
