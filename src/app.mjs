@@ -27,7 +27,10 @@ import _ from 'lodash'
 import conf from '../data/config.json'
 import Scanner from './scanner'
 
-const debug = require('debug')('node-p2pool-scanner:server')
+import Debug from 'debug'
+const debug = Debug("node-p2pool-scanner:server")
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const app = express()
 
@@ -123,7 +126,7 @@ if (cluster.isMaster) {
 
   // catch 404 and forward to error handler
   app.use((req, res, next) => {
-    const err: any = new Error('Not Found')
+    const err = new Error('Not Found')
     err.status = 404
     return next(err)
   })

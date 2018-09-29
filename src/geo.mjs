@@ -23,7 +23,7 @@ import http from 'http'
 
 const access_key = '8ac4083db135ae1c5137c8f458837415'
 
-function Geo(timeout: number) {
+function Geo(timeout) {
   const self = this
 
   function request(options, callback) {
