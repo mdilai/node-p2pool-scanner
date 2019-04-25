@@ -25,7 +25,7 @@ import cluster from 'cluster'
 import Promise from 'bluebird'
 import _ from 'lodash'
 import conf from '../data/config.json'
-import Scanner from './scanner'
+import Scanner from './scanner.mjs'
 
 import Debug from 'debug'
 const debug = Debug("node-p2pool-scanner:server")

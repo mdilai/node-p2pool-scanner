@@ -24,7 +24,7 @@ import fs from 'fs'
 import http from 'http'
 import _ from 'lodash'
 import debug from 'debug'
-import Geo from './geo'
+import Geo from './geo.mjs'
 import conf from '../data/config.json'
 
 const dpc = (t, fn) => {
