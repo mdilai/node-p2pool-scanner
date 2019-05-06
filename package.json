@@ -23,7 +23,7 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "node-sass": "^4.11.0"
+    "node-sass": "^4.12.0"
   },
   "description": "Scanner of public P2Pool nodes",
   "main": "src/app.mjs",
