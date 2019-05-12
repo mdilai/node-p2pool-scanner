@@ -13,7 +13,7 @@
   "ltc": {
 	  "port": 9327,	
   	"currency": "Litecoin",
-  	"addr_file": "/opt/p2pool/app/data/litecoin/addrs",
+  	"addr_file": "/opt/p2pool/fork/app/data/litecoin/addrs",
   	"init_file": "data/p2pool-litecoin-init.txt",
   	"store_file": "data/p2pool-litecoin-public.json",
   	"probe_N_IPs_simultaneously": 30,
