@@ -17,9 +17,9 @@
     "css": "node-sass --recursive --output public/stylesheets/ --source-map true --output-style compressed public/stylesheets/"
   },
   "dependencies": {
-    "bluebird": "^3.5.4",
+    "bluebird": "^3.5.5",
     "debug": "^4.1.1",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
