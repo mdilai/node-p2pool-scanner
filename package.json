@@ -17,13 +17,13 @@
     "css": "node-sass --recursive --output public/stylesheets/ --source-map true --output-style compressed public/stylesheets/"
   },
   "dependencies": {
-    "bluebird": "^3.5.5",
+    "bluebird": "^3.7.1",
     "debug": "^4.1.1",
     "express": "^4.17.1",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "node-sass": "^4.12.0"
+    "node-sass": "^4.13.0"
   },
   "description": "Scanner of public P2Pool nodes",
   "main": "src/app.mjs",
