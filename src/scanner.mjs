@@ -25,7 +25,9 @@ import http from 'http'
 import _ from 'lodash'
 import debug from 'debug'
 import Geo from './geo.mjs'
+
 import conf from '../data/config.json'
+const global = conf.global;
 
 const dpc = (t, fn) => {
   if (_.isFunction(t)) {
@@ -46,7 +48,7 @@ function Scanner(config) {
   const self = this
   //  functions to fetch data from target node IP
 
-  self.config = conf[config]
+  self.config = conf.instances[config]
 
   self.addr_pending = {}
   //  list of addresses waiting scan
@@ -57,7 +59,7 @@ function Scanner(config) {
   self.share_addrs = {}
   //  map of share to ip:port
 
-  self.geo = new Geo(self.config.http_socket_timeout)
+  self.geo = new Geo()
 
   const log = debug(`node-p2pool-scanner:${self.config.currency}:info`)
   const error = debug(`node-p2pool-scanner:${self.config.currency}:error`)
@@ -184,7 +186,7 @@ function Scanner(config) {
       //  main init
       if (p2poolInit) {
         p2poolInit = false
-        while (self.config.probe_N_IPs_simultaneously--) { self.digest() }
+        while (global.probe_N_IPs_simultaneously--) { self.digest() }
         dpc(60 * 1000, self.store_working)
       }
       dpc(1000 * 60, self.update)
@@ -379,7 +381,7 @@ function Scanner(config) {
   self.list_complete = () => {
     self.addr_pending = self.addr_digested
     self.addr_digested = {}
-    dpc(self.config.rescan_list_delay, self.digest)
+    dpc(global.rescan_list_delay, self.digest)
   }
 
     //  make http request to the target node ip
@@ -404,7 +406,7 @@ function Scanner(config) {
       res.on('error', e => callback(e))
     })
     req.on('socket', (socket) => {
-      socket.setTimeout(self.config.http_socket_timeout)
+      socket.setTimeout(global.http_socket_timeout)
       socket.on('timeout', () => req.abort())
       socket.removeListener('error', () => req.abort())
     })

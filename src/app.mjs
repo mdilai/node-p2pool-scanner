@@ -34,7 +34,7 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const app = express()
 
-const instances = _.keys(conf)
+const instances = _.keys(conf.instances)
 const node = {}
 
 process.setMaxListeners(0);

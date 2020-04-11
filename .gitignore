@@ -31,6 +31,6 @@ npm-debug.log
 
 lib
 
-p2pool-*-public.json
+*.json
 *.css
 *.css.map

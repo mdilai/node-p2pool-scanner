@@ -21,9 +21,10 @@
 
 import http from 'http'
 
-const access_key = '8ac4083db135ae1c5137c8f458837415'
+import conf from '../data/config.json'
+const config = conf.global;
 
-function Geo(timeout) {
+function Geo() {
   const self = this
 
   function request(options, callback) {
@@ -42,7 +43,7 @@ function Geo(timeout) {
     })
     req.on('error', e => console.error('Got an error: ', e))
     req.on('socket', (socket) => {
-      socket.setTimeout(timeout)
+      socket.setTimeout(config.http_socket_timeout)
       socket.on('timeout', () => req.abort())
       socket.removeListener('error', () => req.abort())
     })
@@ -64,7 +65,7 @@ function Geo(timeout) {
     const options = {
       host: 'api.ipstack.com',
       port: 80,
-      path: `/${ip}?access_key=${access_key}&fields=country_name,region_name,city,country_code`,
+      path: `/${ip}?access_key=${config.access_key}&fields=country_name,region_name,city,country_code`,
       method: 'GET',
     }
 
