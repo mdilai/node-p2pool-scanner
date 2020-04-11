@@ -5,7 +5,7 @@ Fast multi-thread online scanner of public P2Pool-based mining pools. Created fo
 ## Installation
 * Run
 `npm install` in cloned repo
-* Rename `data/config.dist` to `data/config` and configure it according to your needs.
+* Rename `data/config.json.dist` to `data/config.json` and configure it according to your needs.
 
 ## Configuration details
 
