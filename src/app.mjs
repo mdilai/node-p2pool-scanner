@@ -96,12 +96,6 @@ if (cluster.isMaster) {
   server.on('listening', onListening)
 
   app.use(express.static(path.join(__dirname, '../public')))
-/*  app.use((req, res, next) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.header('Access-Control-Allow-Origin', 'http://localhost:4200')
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-    return next()
-  }) */
 
   app.use('/:coin', wrap(async (req, res, next) => {
     res.setHeader('Content-Type', 'application/json')

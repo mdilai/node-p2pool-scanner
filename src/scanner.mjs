@@ -259,8 +259,6 @@ function Scanner(config) {
         error(`[${self.config.currency}]: Error reading JSON from ${self.config.store_file}`)
         return
       }
-      /*      for (const id in self.addr_working) {
-              const info = self.addr_working[id]; */
       iterObj(self.addr_working, (id) => {
         const info = self.addr_working[id]
         self.calc_node(info)
@@ -410,12 +408,6 @@ function Scanner(config) {
       socket.on('timeout', () => req.abort())
       socket.removeListener('error', () => req.abort())
     })
-      /*    req.on('error', e => {
-            if (e.code !== 'ECONNRESET')
-            callback(e);
-            else
-            return;
-            }); */
     req.on('error', e => callback(e))
     req.end()
   }
