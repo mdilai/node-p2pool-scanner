@@ -1,0 +1,29 @@
+[Unit]
+Description=Node P2Pool scanner
+
+[Service]
+User=CHANGE_ME_TO_USER
+Group=WHO_OWN_WORK_DIR
+WorkingDirectory=/opt/node-p2pool-scanner
+ExecStart=/usr/bin/node --experimental-modules --experimental-json-modules app.mjs
+Environment=NODE_ENV=production PORT=43000 DEBUG=node-p2pool-scanner:*:*
+Type=simple
+Restart=always
+RestartSec=5
+StartLimitInterval=120s
+StartLimitBurst=5
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+
+##### Hardening, comment out if any troubles #####
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/opt/node-p2pool-scanner/data
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=false
+ProtectSystem=full
+NoNewPrivileges=true
+##################################################
+
+[Install]
+WantedBy=multi-user.target
