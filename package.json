@@ -19,7 +19,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "nodemon": "^2.0.3"
   },
   "description": "Scanner of public P2Pool nodes",
